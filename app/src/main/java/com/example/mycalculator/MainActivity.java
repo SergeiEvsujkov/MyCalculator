@@ -292,6 +292,5 @@ public class MainActivity extends AppCompatActivity {
             monitor.setText(monitorString);
         }
     }
-
-
+    
 }
