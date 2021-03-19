@@ -217,7 +217,6 @@ public class MainActivity extends AppCompatActivity {
             if (!isEqual) {
                 secondNumber = Float.parseFloat((String) monitor.getText());
                 monitorString.setLength(0);
-                isPoint = false;
 
                 if (isPlus) {
                     monitorString.append(firstNumber + secondNumber);
@@ -242,11 +241,11 @@ public class MainActivity extends AppCompatActivity {
                 isSqrt = false;
                 isEqual = true;
 
-                if (Float.parseFloat(String.valueOf(monitorString)) > 99999999 || Float.parseFloat(String.valueOf(monitorString)) < -99999999) {
+                if ((Float.parseFloat(String.valueOf(monitorString)) <100000000) && (Float.parseFloat(String.valueOf(monitorString)) > -100000000)) {
+                    updateMonitor();
+                } else {
                     monitorString.setLength(0);
                     monitor.setText("ERROR");
-                } else {
-                    updateMonitor();
                 }
                 monitorString.setLength(0);
 
@@ -281,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint({"SetTextI18n", "DefaultLocale"})
     private void updateMonitor() {
-        if (Float.parseFloat(String.valueOf(monitorString)) % 1 == 0 && isEqual) {
+        if (Float.parseFloat(String.valueOf(monitorString)) % 1 == 0 && (isEqual || isSqrt)) {
             monitor.setText(String.format("%.0f", Float.parseFloat(String.valueOf(monitorString))));
         } else if (Float.parseFloat(String.valueOf(monitorString)) % 1 == 0 && !isEqual) {
             monitor.setText(monitorString);
