@@ -42,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:backgroundTint="#EF5350"
+                android:backgroundTint="@color/red_flat"
                 android:text="@string/c" />
 
             <Button
@@ -50,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:backgroundTint="#EF5350"
+                android:backgroundTint="@color/red_flat"
                 android:text="@string/off" />
 
             <Button
@@ -58,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:backgroundTint="#26C6DA"
+                android:backgroundTint="@color/blue_flat"
                 android:text="@string/sqr_root" />
 
 
@@ -66,7 +66,7 @@
                 android:id="@+id/divisionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#26C6DA"
+                android:backgroundTint="@color/blue_flat"
                 android:text="@string/division" />
 
         </TableRow>
@@ -82,7 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:backgroundTint="#AED581"
+                android:backgroundTint="@color/green_flat"
                 android:text="@string/d7"
                 tools:ignore="ButtonStyle" />
 
@@ -91,7 +91,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:backgroundTint="#AED581"
+                android:backgroundTint="@color/green_flat"
                 android:text="@string/d8"
                 tools:ignore="ButtonStyle" />
 
@@ -100,7 +100,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:backgroundTint="#AED581"
+                android:backgroundTint="@color/green_flat"
                 android:text="@string/d9"
                 tools:ignore="ButtonStyle" />
 
@@ -108,7 +108,7 @@
                 android:id="@+id/multiplyButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#26C6DA"
+                android:backgroundTint="@color/blue_flat"
                 android:text="@string/multiplication"
                 tools:ignore="ButtonStyle" />
 
@@ -125,7 +125,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:backgroundTint="#AED581"
+                android:backgroundTint="@color/green_flat"
                 android:text="@string/d4" />
 
             <Button
@@ -133,7 +133,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:backgroundTint="#AED581"
+                android:backgroundTint="@color/green_flat"
                 android:text="@string/d5" />
 
             <Button
@@ -141,14 +141,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:backgroundTint="#AED581"
+                android:backgroundTint="@color/green_flat"
                 android:text="@string/d6" />
 
             <Button
                 android:id="@+id/minusButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#26C6DA"
+                android:backgroundTint="@color/blue_flat"
                 android:text="@string/minus" />
 
         </TableRow>
@@ -164,7 +164,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:backgroundTint="#AED581"
+                android:backgroundTint="@color/green_flat"
                 android:text="@string/d1" />
 
             <Button
@@ -172,7 +172,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:backgroundTint="#AED581"
+                android:backgroundTint="@color/green_flat"
                 android:text="@string/d2" />
 
             <Button
@@ -180,14 +180,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:backgroundTint="#AED581"
+                android:backgroundTint="@color/green_flat"
                 android:text="@string/d3" />
 
             <Button
                 android:id="@+id/plusButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#26C6DA"
+                android:backgroundTint="@color/blue_flat"
                 android:text="@string/plus" />
 
         </TableRow>
@@ -203,7 +203,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:backgroundTint="#AED581"
+                android:backgroundTint="@color/green_flat"
                 android:text="@string/d0" />
 
             <Button
@@ -211,7 +211,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:backgroundTint="#AED581"
+                android:backgroundTint="@color/green_flat"
                 android:text="@string/point" />
 
 
@@ -220,7 +220,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_span="2"
-                android:backgroundTint="#26C6DA"
+                android:backgroundTint="@color/blue_flat"
                 android:text="@string/equally" />
 
         </TableRow>
