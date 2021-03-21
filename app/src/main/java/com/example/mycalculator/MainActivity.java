@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 monitor.setText("ERROR");
             }
-
+            monitor.setText(monitor.getText().toString().replaceAll("\\.(.*?)0+$", ".$1").replaceAll("\\.$", ""));
         });
     }
 
@@ -258,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-
+                monitor.setText(monitor.getText().toString().replaceAll("\\.(.*?)0+$", ".$1").replaceAll("\\.$", ""));
                 isPlus = false;
                 isMinus = false;
                 isMultiply = false;
