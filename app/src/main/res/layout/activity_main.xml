@@ -7,6 +7,15 @@
     android:background="@drawable/back"
     tools:context=".MainActivity">
 
+    <EditText
+        android:id="@+id/value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints"
+        android:autofillHints=""
+        android:visibility="invisible"/>
+
+
     <TextView
         android:id="@+id/monitor"
         android:layout_width="match_parent"
@@ -43,7 +52,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:backgroundTint="@color/red_flat"
-                android:text="@string/c" />
+                android:text="@string/c"
+                tools:ignore="ButtonStyle" />
 
             <Button
                 android:id="@+id/offButton"
@@ -51,7 +61,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:backgroundTint="@color/red_flat"
-                android:text="@string/off" />
+                android:text="@string/off"
+                tools:ignore="ButtonStyle" />
 
             <Button
                 android:id="@+id/sqrtButton"
@@ -59,7 +70,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:backgroundTint="@color/blue_flat"
-                android:text="@string/sqr_root" />
+                android:text="@string/sqr_root"
+                tools:ignore="ButtonStyle" />
 
 
             <Button
@@ -67,7 +79,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/blue_flat"
-                android:text="@string/division" />
+                android:text="@string/division"
+                tools:ignore="ButtonStyle" />
 
         </TableRow>
 
@@ -126,7 +139,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:backgroundTint="@color/green_flat"
-                android:text="@string/d4" />
+                android:text="@string/d4"
+                tools:ignore="ButtonStyle" />
 
             <Button
                 android:id="@+id/fiveButton"
@@ -134,7 +148,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:backgroundTint="@color/green_flat"
-                android:text="@string/d5" />
+                android:text="@string/d5"
+                tools:ignore="ButtonStyle" />
 
             <Button
                 android:id="@+id/sixButton"
@@ -142,14 +157,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:backgroundTint="@color/green_flat"
-                android:text="@string/d6" />
+                android:text="@string/d6"
+                tools:ignore="ButtonStyle" />
 
             <Button
                 android:id="@+id/minusButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/blue_flat"
-                android:text="@string/minus" />
+                android:text="@string/minus"
+                tools:ignore="ButtonStyle" />
 
         </TableRow>
 
@@ -165,7 +182,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:backgroundTint="@color/green_flat"
-                android:text="@string/d1" />
+                android:text="@string/d1"
+                tools:ignore="ButtonStyle" />
 
             <Button
                 android:id="@+id/twoButton"
@@ -173,7 +191,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:backgroundTint="@color/green_flat"
-                android:text="@string/d2" />
+                android:text="@string/d2"
+                tools:ignore="ButtonStyle" />
 
             <Button
                 android:id="@+id/threeButton"
@@ -181,14 +200,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:backgroundTint="@color/green_flat"
-                android:text="@string/d3" />
+                android:text="@string/d3"
+                tools:ignore="ButtonStyle" />
 
             <Button
                 android:id="@+id/plusButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/blue_flat"
-                android:text="@string/plus" />
+                android:text="@string/plus"
+                tools:ignore="ButtonStyle" />
 
         </TableRow>
 
@@ -204,7 +225,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:backgroundTint="@color/green_flat"
-                android:text="@string/d0" />
+                android:text="@string/d0"
+                tools:ignore="ButtonStyle" />
 
             <Button
                 android:id="@+id/pointButton"
@@ -212,7 +234,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:backgroundTint="@color/green_flat"
-                android:text="@string/point" />
+                android:text="@string/point"
+                tools:ignore="ButtonStyle" />
 
 
             <Button
@@ -221,7 +244,8 @@
                 android:layout_height="wrap_content"
                 android:layout_span="2"
                 android:backgroundTint="@color/blue_flat"
-                android:text="@string/equally" />
+                android:text="@string/equally"
+                tools:ignore="ButtonStyle" />
 
         </TableRow>
 
