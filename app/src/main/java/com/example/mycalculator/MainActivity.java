@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     private MyCalc myCalc = new MyCalc();
 
-    private String myCalcKey = "myCalcKey";
+    private final String MY_CALC_KEY = "myCalcKey";
 
 
     public MainActivity() {
@@ -103,19 +103,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickResetButton() {
         resetButton.setOnClickListener(v -> {
-            myCalc.firstNumber = BigDecimal.valueOf(0);
-            myCalc.secondNumber = BigDecimal.valueOf(0);
+            myCalc.setFirstNumber(BigDecimal.valueOf(0));
+            myCalc.setSecondNumber(BigDecimal.valueOf(0));
             value.setText("0");
             monitor.setText("0");
-            myCalc.isPoint = false;
-            myCalc.isPlus = false;
-            myCalc.isMinus = false;
-            myCalc.isMultiply = false;
-            myCalc.isEqual = true;
-            myCalc.isDivision = false;
-            myCalc.isNumber = false;
-            myCalc.isSqrt = false;
-            myCalc.result = value.getText().toString();
+            myCalc.setAllButtonIsNotClicked();
+            myCalc.setEqual(true);
+            myCalc.setResult(value.getText().toString());
 
         });
     }
@@ -130,154 +124,120 @@ public class MainActivity extends AppCompatActivity {
     public void onClickSqrtButton() {
         sqrtButton.setOnClickListener(v -> {
             try {
-                myCalc.firstNumber = new BigDecimal(value.getText().toString());
+                myCalc.setFirstNumber(new BigDecimal(value.getText().toString()));
             } catch (Exception e) {
-                myCalc.firstNumber = new BigDecimal("0");
+                myCalc.setFirstNumber(new BigDecimal("0"));
             }
-            if (myCalc.firstNumber.floatValue() >= 0) {
-                value.setText(String.format("%.7f", Math.sqrt(myCalc.firstNumber.doubleValue())));
-                monitor.setText(String.format("%.7f", Math.sqrt(myCalc.firstNumber.doubleValue())));
-                myCalc.result = value.getText().toString();
-            } else {
-                monitor.setText("ERROR");
-                myCalc.result = value.getText().toString();
+            if (!monitor.getText().equals("ERROR")) {
+                if (myCalc.getFirstNumber().floatValue() >= 0) {
+                    value.setText(String.format("%.7f", Math.sqrt(myCalc.getFirstNumber().doubleValue())));
+                    monitor.setText(value.getText());
+                } else {
+                    monitor.setText("ERROR");
+                }
+                monitor.setText(monitor.getText().toString().replaceAll("\\.(.*?)0+$", ".$1").replaceAll("\\.$", ""));
+
             }
-            monitor.setText(monitor.getText().toString().replaceAll("\\.(.*?)0+$", ".$1").replaceAll("\\.$", ""));
+            myCalc.setResult(monitor.getText().toString());
         });
     }
 
 
     public void onClickDivisionButton() {
         divisionButton.setOnClickListener(v -> {
-            if (!myCalc.isDivision) {
+            if (!myCalc.isDivision()) {
                 try {
-                    myCalc.firstNumber = new BigDecimal(value.getText().toString());
+                    myCalc.setFirstNumber(new BigDecimal(value.getText().toString()));
                 } catch (Exception e) {
-                    myCalc.firstNumber = new BigDecimal("0");
+                    myCalc.setFirstNumber(new BigDecimal("0"));
                 }
                 value.getText().clear();
                 value.append("0");
-                myCalc.isPoint = false;
-                myCalc.isPlus = false;
-                myCalc.isMinus = false;
-                myCalc.isMultiply = false;
-                myCalc.isEqual = false;
-                myCalc.isDivision = true;
-                myCalc.isNumber = false;
-                myCalc.isSqrt = false;
+                myCalc.setAllButtonIsNotClicked();
+                myCalc.setDivision(true);
             }
-            myCalc.result = value.getText().toString();
+            myCalc.setResult(monitor.getText().toString());
         });
     }
 
     public void onClickMultiplyButton() {
         multiplyButton.setOnClickListener(v -> {
-            if (!myCalc.isMultiply) {
+            if (!myCalc.isMultiply()) {
                 try {
-                    myCalc.firstNumber = new BigDecimal(value.getText().toString());
+                    myCalc.setFirstNumber(new BigDecimal(value.getText().toString()));
                 } catch (Exception e) {
-                    myCalc.firstNumber = new BigDecimal("0");
+                    myCalc.setFirstNumber(new BigDecimal("0"));
                 }
                 value.getText().clear();
                 value.append("0");
-                myCalc.isPoint = false;
-                myCalc.isPlus = false;
-                myCalc.isMinus = false;
-                myCalc.isMultiply = true;
-                myCalc.isEqual = false;
-                myCalc.isDivision = false;
-                myCalc.isNumber = false;
-                myCalc.isSqrt = false;
+                myCalc.setAllButtonIsNotClicked();
+                myCalc.setMultiply(true);
+
             }
-            myCalc.result = value.getText().toString();
+            myCalc.setResult(monitor.getText().toString());
         });
     }
 
 
     public void onClickMinusButton() {
         minusButton.setOnClickListener(v -> {
-            if (!myCalc.isMinus) {
+            if (!myCalc.isMinus()) {
 
                 try {
-                    myCalc.firstNumber = new BigDecimal(value.getText().toString());
+                    myCalc.setFirstNumber(new BigDecimal(value.getText().toString()));
                 } catch (Exception e) {
-                    myCalc.firstNumber = new BigDecimal("0");
+                    myCalc.setFirstNumber(new BigDecimal("0"));
                 }
                 value.getText().clear();
                 value.append("0");
-                myCalc.isPoint = false;
-                myCalc.isPlus = false;
-                myCalc.isMinus = true;
-                myCalc.isMultiply = false;
-                myCalc.isEqual = false;
-                myCalc.isDivision = false;
-                myCalc.isNumber = false;
-                myCalc.isSqrt = false;
+                myCalc.setAllButtonIsNotClicked();
+                myCalc.setMinus(true);
 
             }
-            myCalc.result = value.getText().toString();
+            myCalc.setResult(monitor.getText().toString());
         });
     }
 
     @SuppressLint({"SetTextI18n", "DefaultLocale"})
     public void onClickEqualButton() {
         equalButton.setOnClickListener(v -> {
-            if (!myCalc.isEqual && (myCalc.isPoint || myCalc.isNumber)) {
-                myCalc.secondNumber = new BigDecimal(value.getText().toString());
+            if (!myCalc.isEqual() && (myCalc.isPoint() || myCalc.isNumber())) {
+                myCalc.setSecondNumber(new BigDecimal(value.getText().toString()));
                 value.getText().clear();
-                if (myCalc.isPlus) {
-                    monitor.setText(myCalc.firstNumber.add(myCalc.secondNumber).setScale(7, RoundingMode.DOWN).toString());
-                } else if (myCalc.isMinus) {
-                    monitor.setText(myCalc.firstNumber.subtract(myCalc.secondNumber).setScale(7, RoundingMode.DOWN).toString());
-                } else if (myCalc.isDivision) {
-                    if (myCalc.secondNumber.floatValue() != 0) {
-                        monitor.setText(myCalc.firstNumber.divide(myCalc.secondNumber, 7, RoundingMode.DOWN).toString());
+                if (myCalc.isPlus()) {
+                    monitor.setText(myCalc.getFirstNumber().add(myCalc.getSecondNumber()).setScale(7, RoundingMode.DOWN).toString());
+                } else if (myCalc.isMinus()) {
+                    monitor.setText(myCalc.getFirstNumber().subtract(myCalc.getSecondNumber()).setScale(7, RoundingMode.DOWN).toString());
+                } else if (myCalc.isDivision()) {
+                    if (myCalc.getSecondNumber().floatValue() != 0) {
+                        monitor.setText(myCalc.getFirstNumber().divide(myCalc.getSecondNumber(), 7, RoundingMode.DOWN).toString());
+
                     } else {
                         monitor.setText("ERROR");
-                        value.getText().clear();
-                        myCalc.isPoint = false;
-                        myCalc.isPlus = false;
-                        myCalc.isMinus = false;
-                        myCalc.isMultiply = false;
-                        myCalc.isEqual = true;
-                        myCalc.isDivision = false;
-                        myCalc.isNumber = false;
-                        myCalc.isSqrt = false;
+                        myCalc.setAllButtonIsNotClicked();
+                        myCalc.setEqual(true);
+
+                        myCalc.setFirstNumber(BigDecimal.valueOf(0));
+                        myCalc.setSecondNumber(BigDecimal.valueOf(0));
+                        value.setText("0");
+                        myCalc.setResult(monitor.getText().toString());
+
                         return;
                     }
-                } else if (myCalc.isMultiply) {
-                    monitor.setText(myCalc.firstNumber.multiply(myCalc.secondNumber).setScale(7, RoundingMode.DOWN).toString());
+                } else if (myCalc.isMultiply()) {
+                    monitor.setText(myCalc.getFirstNumber().multiply(myCalc.getSecondNumber()).setScale(7, RoundingMode.DOWN).toString());
                 } else {
                     value.setText("0");
-                    myCalc.isPoint = false;
-                    myCalc.isPlus = false;
-                    myCalc.isMinus = false;
-                    myCalc.isMultiply = false;
-                    myCalc.isEqual = true;
-                    myCalc.isDivision = false;
-                    myCalc.isNumber = false;
-                    myCalc.isSqrt = false;
+                    myCalc.setAllButtonIsNotClicked();
+                    myCalc.setEqual(true);
+                    myCalc.setResult(monitor.getText().toString());
                     return;
                 }
                 value.setText(monitor.getText());
-                myCalc.result = value.getText().toString();
-                if (Float.parseFloat(monitor.getText().toString()) % 1 == 0) {
-                    try {
-                        int dotPos = (monitor.getText().toString()).indexOf(".");
-                        monitor.setText(monitor.getText().toString().substring(0, dotPos));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
                 monitor.setText(monitor.getText().toString().replaceAll("\\.(.*?)0+$", ".$1").replaceAll("\\.$", ""));
-                myCalc.isPoint = false;
-                myCalc.isPlus = false;
-                myCalc.isMinus = false;
-                myCalc.isMultiply = false;
-                myCalc.isEqual = true;
-                myCalc.isDivision = false;
-                myCalc.isNumber = false;
-                myCalc.isSqrt = false;
+                myCalc.setAllButtonIsNotClicked();
+                myCalc.setEqual(true);
+                myCalc.setResult(monitor.getText().toString());
 
             }
 
@@ -287,70 +247,74 @@ public class MainActivity extends AppCompatActivity {
     public void onClickPlusButton() {
         plusButton.setOnClickListener(v -> {
 
-            if (!myCalc.isPlus) {
+            if (!myCalc.isPlus()) {
                 try {
-                    myCalc.firstNumber = new BigDecimal(value.getText().toString());
+                    myCalc.setFirstNumber(new BigDecimal(value.getText().toString()));
                 } catch (Exception e) {
-                    myCalc.firstNumber = new BigDecimal("0");
+                    myCalc.setFirstNumber(new BigDecimal("0"));
                 }
                 value.getText().clear();
                 value.append("0");
-                myCalc.isPoint = false;
-                myCalc.isPlus = true;
-                myCalc.isMinus = false;
-                myCalc.isMultiply = false;
-                myCalc.isEqual = false;
-                myCalc.isDivision = false;
-                myCalc.isNumber = false;
-                myCalc.isSqrt = false;
+                myCalc.setAllButtonIsNotClicked();
+                myCalc.setPlus(true);
             }
-            myCalc.result = value.getText().toString();
+            myCalc.setResult(monitor.getText().toString());
         });
     }
 
     public void onClickPointButton() {
         pointButton.setOnClickListener(v -> {
-            if ((!myCalc.isPoint && myCalc.isNumber) || (!myCalc.isPoint && Float.parseFloat(monitor.getText().toString()) == 0)) {
-                value.append(".");
-                monitor.setText(value.getText());
 
-                myCalc.isPoint = true;
-                myCalc.isNumber = true;
-                myCalc.isSqrt = false;
+            try {
+                if ((!myCalc.isPoint() && myCalc.isNumber()) || (!myCalc.isPoint() && Float.parseFloat(monitor.getText().toString()) == 0)) {
+                    value.append(".");
+                    monitor.setText(value.getText());
+
+                    myCalc.setPoint(true);
+                    myCalc.setNumber(true);
+                    myCalc.setSqrt(false);
+                }
+
+                myCalc.setResult(monitor.getText().toString());
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
             }
-            myCalc.result = value.getText().toString();
-
+            myCalc.setResult(monitor.getText().toString());
         });
     }
 
     public void onClickNumberButton(Button button) {
         button.setOnClickListener(v -> {
-            if (Float.parseFloat(monitor.getText().toString()) == 0 && Float.parseFloat(button.getText().toString()) == 0 && !myCalc.isPoint) {
-                return;
-            } else {
-                if ((myCalc.isDivision && myCalc.isMinus && myCalc.isMultiply && myCalc.isEqual && myCalc.isPlus && myCalc.isSqrt) || !myCalc.isNumber) {
-                    value.setText("");
-                    monitor.setText("");
+            try {
+                if (Float.parseFloat(monitor.getText().toString()) == 0 && Float.parseFloat(button.getText().toString()) == 0 && !myCalc.isPoint()) {
+                    return;
+                } else {
+                    if ((myCalc.isDivision() && myCalc.isMinus() && myCalc.isMultiply() && myCalc.isEqual() && myCalc.isPlus() && myCalc.isSqrt()) || !myCalc.isNumber()) {
+                        value.setText("");
+                        monitor.setText("");
 
+                    }
+                    if ((value.length() <= 7 && !myCalc.isPoint()) || (value.length() <= 8 && myCalc.isPoint())) {
+
+                        myCalc.setEqual(false);
+                        myCalc.setNumber(true);
+                        myCalc.setSqrt(false);
+
+                        value.append(button.getText());
+                        monitor.setText(value.getText());
+                    }
                 }
-                if ((value.length() <= 7 && !myCalc.isPoint) || (value.length() <= 8 && myCalc.isPoint)) {
-
-                    myCalc.isEqual = false;
-                    myCalc.isNumber = true;
-                    myCalc.isSqrt = false;
-
-                    value.append(button.getText());
-                    monitor.setText(value.getText());
-                }
+                myCalc.setResult(monitor.getText().toString());
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
             }
-            myCalc.result = value.getText().toString();
         });
     }
 
     // Сохранение данных
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putSerializable(myCalcKey, myCalc);
+        outState.putParcelable(MY_CALC_KEY, myCalc);
         super.onSaveInstanceState(outState);
 
     }
@@ -359,13 +323,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        myCalc = (MyCalc) savedInstanceState.getSerializable(myCalcKey);
+        myCalc = (MyCalc) savedInstanceState.getParcelable(MY_CALC_KEY);
         updateMyCalc();
     }
 
     @SuppressLint("SetTextI18n")
     private void updateMyCalc() {
-        monitor.setText(myCalc.result);
+        monitor.setText(myCalc.getResult());
         monitor.setText(monitor.getText().toString().replaceAll("\\.(.*?)0+$", ".$1"));
     }
 
