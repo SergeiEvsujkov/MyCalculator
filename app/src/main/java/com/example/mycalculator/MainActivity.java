@@ -6,8 +6,11 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,19 +37,20 @@ public class MainActivity extends AppCompatActivity {
     private Button eightButton;
     private Button nineButton;
 
-    private float firstNumber;
-    private float secondNumber;
+    private EditText value;
+
+    private BigDecimal firstNumber;
+    private BigDecimal secondNumber;
 
     private boolean isPoint = false;
     private boolean isPlus = false;
     private boolean isMinus = false;
     private boolean isMultiply = false;
     private boolean isDivision = false;
-    private boolean isEqual = false;
+    private boolean isEqual = true;
     private boolean isNumber = false;
     private boolean isSqrt = false;
 
-    private StringBuffer monitorString = new StringBuffer();
 
     public MainActivity() {
     }
@@ -56,14 +60,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
+        value.setText("0");
         onClickResetButton();
         onClickOffButton();
         onClickSqrtButton();
+        onClickPointButton();
+        onClickPlusButton();
         onClickMultiplyButton();
         onClickDivisionButton();
         onClickMinusButton();
-        onClickPlusButton();
-        onClickPointButton();
         onClickEqualButton();
         onClickNumberButton(zeroButton);
         onClickNumberButton(oneButton);
@@ -99,19 +104,20 @@ public class MainActivity extends AppCompatActivity {
         sevenButton = findViewById(R.id.sevenButton);
         eightButton = findViewById(R.id.eightButton);
         nineButton = findViewById(R.id.nineButton);
+        value = findViewById(R.id.value);
     }
 
     public void onClickResetButton() {
         resetButton.setOnClickListener(v -> {
-            firstNumber = 0;
-            secondNumber = 0;
-            monitorString.setLength(0);
+            firstNumber = BigDecimal.valueOf(0);
+            secondNumber = BigDecimal.valueOf(0);
+            value.setText("0");
             monitor.setText("0");
             isPoint = false;
             isPlus = false;
             isMinus = false;
             isMultiply = false;
-            isEqual = false;
+            isEqual = true;
             isDivision = false;
             isNumber = false;
             isSqrt = false;
@@ -125,20 +131,21 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint({"SetTextI18n", "DefaultLocale"})
     public void onClickSqrtButton() {
         sqrtButton.setOnClickListener(v -> {
-            monitorString.setLength(0);
-            firstNumber = Float.parseFloat((String) monitor.getText());
-            if (firstNumber >= 0) {
-                monitorString.append(Math.sqrt(firstNumber));
-            } else {
-                monitorString.append("ERROR");
+            try {
+                firstNumber = new BigDecimal(value.getText().toString());
+            } catch (Exception e) {
+                firstNumber = new BigDecimal("0");
             }
-            isSqrt = true;
-            updateMonitor();
-            monitorString.setLength(0);
-
-
+            if (firstNumber.floatValue() >= 0) {
+                value.setText(String.format("%.7f", Math.sqrt(firstNumber.doubleValue())));
+                monitor.setText(String.format("%.7f", Math.sqrt(firstNumber.doubleValue())));
+            } else {
+                monitor.setText("ERROR");
+            }
+            monitor.setText(monitor.getText().toString().replaceAll("\\.(.*?)0+$", ".$1").replaceAll("\\.$", ""));
         });
     }
 
@@ -146,14 +153,19 @@ public class MainActivity extends AppCompatActivity {
     public void onClickDivisionButton() {
         divisionButton.setOnClickListener(v -> {
             if (!isDivision) {
-                firstNumber = Float.parseFloat((String) monitor.getText());
-                monitorString.setLength(0);
+                try {
+                    firstNumber = new BigDecimal(value.getText().toString());
+                } catch (Exception e) {
+                    firstNumber = new BigDecimal("0");
+                }
+                value.getText().clear();
+                value.append("0");
                 isPoint = false;
-                isPlus = false;
+                isDivision = true;
                 isMinus = false;
                 isMultiply = false;
                 isEqual = false;
-                isDivision = true;
+                isPlus = false;
                 isNumber = false;
                 isSqrt = false;
             }
@@ -163,25 +175,114 @@ public class MainActivity extends AppCompatActivity {
     public void onClickMultiplyButton() {
         multiplyButton.setOnClickListener(v -> {
             if (!isMultiply) {
-                firstNumber = Float.parseFloat((String) monitor.getText());
-                monitorString.setLength(0);
+                try {
+                    firstNumber = new BigDecimal(value.getText().toString());
+                } catch (Exception e) {
+                    firstNumber = new BigDecimal("0");
+                }
+                value.getText().clear();
+                value.append("0");
                 isPoint = false;
                 isDivision = false;
                 isMinus = false;
-                isPlus = false;
-                isEqual = false;
                 isMultiply = true;
+                isEqual = false;
+                isPlus = false;
                 isNumber = false;
                 isSqrt = false;
             }
         });
     }
 
+
+    public void onClickMinusButton() {
+        minusButton.setOnClickListener(v -> {
+            if (!isMinus) {
+
+                try {
+                    firstNumber = new BigDecimal(value.getText().toString());
+                } catch (Exception e) {
+                    firstNumber = new BigDecimal("0");
+                }
+                value.getText().clear();
+                value.append("0");
+                isPoint = false;
+                isDivision = false;
+                isMinus = true;
+                isMultiply = false;
+                isEqual = false;
+                isPlus = false;
+                isNumber = false;
+                isSqrt = false;
+            }
+        });
+    }
+
+    @SuppressLint({"SetTextI18n", "DefaultLocale"})
+    public void onClickEqualButton() {
+        equalButton.setOnClickListener(v -> {
+            if (!isEqual && (isPoint || isNumber)) {
+                secondNumber = new BigDecimal(value.getText().toString());
+                value.getText().clear();
+                if (isPlus) {
+                    monitor.setText(firstNumber.add(secondNumber).setScale(7, RoundingMode.DOWN).toString());
+                } else if (isMinus) {
+                    monitor.setText(firstNumber.subtract(secondNumber).setScale(7, RoundingMode.DOWN).toString());
+                } else if (isDivision) {
+                    if (secondNumber.floatValue() != 0) {
+                        monitor.setText(firstNumber.divide(secondNumber, 7, RoundingMode.DOWN).toString());
+                    } else {
+                        monitor.setText("ERROR");
+                        value.getText().clear();
+                        isPlus = false;
+                        isMinus = false;
+                        isMultiply = false;
+                        isDivision = false;
+                        isNumber = false;
+                        isSqrt = false;
+                        isEqual = true;
+                        isPoint = false;
+                        return;
+                    }
+                } else if (isMultiply) {
+                    monitor.setText(firstNumber.multiply(secondNumber).setScale(7, RoundingMode.DOWN).toString());
+                } else {
+                    return;
+                }
+                value.setText(monitor.getText());
+                if (Float.parseFloat(monitor.getText().toString()) % 1 == 0) {
+                    try {
+                        int dotPos = (monitor.getText().toString()).indexOf(".");
+                        monitor.setText(monitor.getText().toString().substring(0, dotPos));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                monitor.setText(monitor.getText().toString().replaceAll("\\.(.*?)0+$", ".$1").replaceAll("\\.$", ""));
+                isPlus = false;
+                isMinus = false;
+                isMultiply = false;
+                isDivision = false;
+                isNumber = false;
+                isSqrt = false;
+                isEqual = true;
+                isPoint = false;
+
+            }
+        });
+    }
+
     public void onClickPlusButton() {
         plusButton.setOnClickListener(v -> {
+
             if (!isPlus) {
-                firstNumber = Float.parseFloat((String) monitor.getText());
-                monitorString.setLength(0);
+                try {
+                    firstNumber = new BigDecimal(value.getText().toString());
+                } catch (Exception e) {
+                    firstNumber = new BigDecimal("0");
+                }
+                value.getText().clear();
+                value.append("0");
                 isPoint = false;
                 isDivision = false;
                 isMinus = false;
@@ -194,73 +295,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void onClickMinusButton() {
-        minusButton.setOnClickListener(v -> {
-            if (!isMinus) {
-                firstNumber = Float.parseFloat((String) monitor.getText());
-                monitorString.setLength(0);
-                isPoint = false;
-                isDivision = false;
-                isPlus = false;
-                isMultiply = false;
-                isEqual = false;
-                isMinus = true;
-                isNumber = false;
-                isSqrt = false;
-            }
-        });
-    }
-
-    @SuppressLint("SetTextI18n")
-    public void onClickEqualButton() {
-        equalButton.setOnClickListener(v -> {
-            if (!isEqual) {
-                secondNumber = Float.parseFloat((String) monitor.getText());
-                monitorString.setLength(0);
-                isPoint = false;
-
-                if (isPlus) {
-                    monitorString.append(firstNumber + secondNumber);
-                } else if (isMinus) {
-                    monitorString.append(firstNumber - secondNumber);
-                } else if (isDivision) {
-                    if (secondNumber != 0) {
-                        monitorString.append(firstNumber / secondNumber);
-                    } else {
-                        monitorString.append("ERROR");
-                    }
-                } else if (isMultiply) {
-                    monitorString.append(firstNumber * secondNumber);
-                } else {
-                    return;
-                }
-                isPlus = false;
-                isMinus = false;
-                isMultiply = false;
-                isDivision = false;
-                isNumber = false;
-                isSqrt = false;
-                isEqual = true;
-
-                if (Float.parseFloat(String.valueOf(monitorString)) > 99999999 || Float.parseFloat(String.valueOf(monitorString)) < -99999999) {
-                    monitorString.setLength(0);
-                    monitor.setText("ERROR");
-                } else {
-                    updateMonitor();
-                }
-                monitorString.setLength(0);
-
-            }
-        });
-    }
-
     public void onClickPointButton() {
         pointButton.setOnClickListener(v -> {
-            if (!isPoint && isNumber) {
-                monitorString.append(".");
-                updateMonitor();
+            if ((!isPoint && isNumber) || (!isPoint && Float.parseFloat(monitor.getText().toString()) == 0)) {
+                value.append(".");
+                monitor.setText(value.getText());
                 isPoint = true;
                 isSqrt = false;
+                isNumber = true;
             }
 
         });
@@ -268,29 +310,23 @@ public class MainActivity extends AppCompatActivity {
 
     public void onClickNumberButton(Button button) {
         button.setOnClickListener(v -> {
-            if ((monitorString.length() <= 7 && !isPoint) || (monitorString.length() <= 8 && isPoint)) {
-                monitorString.append(button.getText());
-                isEqual = false;
-                isNumber = true;
-                isSqrt = false;
-                updateMonitor();
+            if (Float.parseFloat(monitor.getText().toString()) == 0 && Float.parseFloat(button.getText().toString()) == 0 && !isPoint) {
+                return;
+            } else {
+                if ((isDivision && isMinus && isMultiply && isEqual && isPlus && isSqrt) || !isNumber) {
+                    value.setText("");
+                    monitor.setText("");
+
+                }
+                if ((value.length() <= 7 && !isPoint) || (value.length() <= 8 && isPoint)) {
+                    isEqual = false;
+                    isNumber = true;
+                    isSqrt = false;
+                    value.append(button.getText());
+                    monitor.setText(value.getText());
+                }
             }
         });
-    }
-
-
-    @SuppressLint({"SetTextI18n", "DefaultLocale"})
-    private void updateMonitor() {
-        if (Float.parseFloat(String.valueOf(monitorString)) % 1 == 0 && isEqual) {
-            monitor.setText(String.format("%.0f", Float.parseFloat(String.valueOf(monitorString))));
-        } else if (Float.parseFloat(String.valueOf(monitorString)) % 1 == 0 && !isEqual) {
-            monitor.setText(monitorString);
-        } else if (isNumber && !isSqrt) {
-            monitor.setText(monitorString);
-        } else {
-            monitorString.setLength(9);
-            monitor.setText(monitorString);
-        }
     }
 
 
