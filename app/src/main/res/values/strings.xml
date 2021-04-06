@@ -23,4 +23,8 @@
     <string name="percent">%</string>
     <string name="d5">5</string>
     <string name="d6">6</string>
+    <string name="change_theme">Change theme</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
+    <string name="sport">Sport</string>
 </resources>
