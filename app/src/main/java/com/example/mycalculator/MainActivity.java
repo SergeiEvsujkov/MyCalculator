@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +14,7 @@ import com.example.mycalculator.business_logic.MyCalc;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Objects;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -28,16 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private Button minusButton;
     private Button equalButton;
     private Button pointButton;
-    private Button zeroButton;
-    private Button oneButton;
-    private Button twoButton;
-    private Button threeButton;
-    private Button fourButton;
-    private Button fiveButton;
-    private Button sixButton;
-    private Button sevenButton;
-    private Button eightButton;
-    private Button nineButton;
+    private Button changeTheme;
 
     private MyCalc myCalc = new MyCalc();
 
@@ -51,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         initViews();
         monitor.setText("0");
         value.setText("0");
@@ -63,18 +57,21 @@ public class MainActivity extends AppCompatActivity {
         onClickDivisionButton();
         onClickMinusButton();
         onClickEqualButton();
-        onClickNumberButton(zeroButton);
-        onClickNumberButton(oneButton);
-        onClickNumberButton(twoButton);
-        onClickNumberButton(threeButton);
-        onClickNumberButton(fourButton);
-        onClickNumberButton(fiveButton);
-        onClickNumberButton(sixButton);
-        onClickNumberButton(sevenButton);
-        onClickNumberButton(eightButton);
-        onClickNumberButton(nineButton);
+        onClickNumberButton();
+        onClickChangeTheme();
 
     }
+
+    private final int[] numberButtonIds = new int[]{R.id.zeroButton,
+            R.id.oneButton,
+            R.id.twoButton,
+            R.id.threeButton,
+            R.id.fourButton,
+            R.id.fiveButton,
+            R.id.sixButton,
+            R.id.sevenButton,
+            R.id.eightButton,
+            R.id.nineButton};
 
 
     private void initViews() {
@@ -88,17 +85,8 @@ public class MainActivity extends AppCompatActivity {
         minusButton = findViewById(R.id.minusButton);
         equalButton = findViewById(R.id.equalButton);
         pointButton = findViewById(R.id.pointButton);
-        zeroButton = findViewById(R.id.zeroButton);
-        oneButton = findViewById(R.id.oneButton);
-        twoButton = findViewById(R.id.twoButton);
-        threeButton = findViewById(R.id.threeButton);
-        fourButton = findViewById(R.id.fourButton);
-        fiveButton = findViewById(R.id.fiveButton);
-        sixButton = findViewById(R.id.sixButton);
-        sevenButton = findViewById(R.id.sevenButton);
-        eightButton = findViewById(R.id.eightButton);
-        nineButton = findViewById(R.id.nineButton);
         value = findViewById(R.id.value);
+        changeTheme = findViewById(R.id.changeTheme);
     }
 
     public void onClickResetButton() {
@@ -115,9 +103,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickOffButton() {
-        offButton.setOnClickListener(v -> {
-            finish();
-        });
+        offButton.setOnClickListener(v -> finish());
     }
 
     @SuppressLint({"SetTextI18n", "DefaultLocale"})
@@ -283,32 +269,36 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void onClickNumberButton(Button button) {
-        button.setOnClickListener(v -> {
-            try {
-                if (Float.parseFloat(monitor.getText().toString()) == 0 && Float.parseFloat(button.getText().toString()) == 0 && !myCalc.isPoint()) {
-                    return;
-                } else {
-                    if ((myCalc.isDivision() && myCalc.isMinus() && myCalc.isMultiply() && myCalc.isEqual() && myCalc.isPlus() && myCalc.isSqrt()) || !myCalc.isNumber()) {
-                        value.setText("");
-                        monitor.setText("");
+    public void onClickNumberButton() {
 
+        for (int numbersId : numberButtonIds) {
+            Button button = findViewById(numbersId);
+            button.setOnClickListener(v -> {
+                try {
+                    if (Float.parseFloat(monitor.getText().toString()) == 0 && Float.parseFloat(button.getText().toString()) == 0 && !myCalc.isPoint()) {
+                        return;
+                    } else {
+                        if ((myCalc.isDivision() && myCalc.isMinus() && myCalc.isMultiply() && myCalc.isEqual() && myCalc.isPlus() && myCalc.isSqrt()) || !myCalc.isNumber()) {
+                            value.setText("");
+                            monitor.setText("");
+
+                        }
+                        if ((value.length() <= 7 && !myCalc.isPoint()) || (value.length() <= 8 && myCalc.isPoint())) {
+
+                            myCalc.setEqual(false);
+                            myCalc.setNumber(true);
+                            myCalc.setSqrt(false);
+
+                            value.append(button.getText());
+                            monitor.setText(value.getText());
+                        }
                     }
-                    if ((value.length() <= 7 && !myCalc.isPoint()) || (value.length() <= 8 && myCalc.isPoint())) {
-
-                        myCalc.setEqual(false);
-                        myCalc.setNumber(true);
-                        myCalc.setSqrt(false);
-
-                        value.append(button.getText());
-                        monitor.setText(value.getText());
-                    }
+                    myCalc.setResult(monitor.getText().toString());
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
                 }
-                myCalc.setResult(monitor.getText().toString());
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-        });
+            });
+        }
     }
 
     // Сохранение данных
@@ -331,6 +321,14 @@ public class MainActivity extends AppCompatActivity {
     private void updateMyCalc() {
         monitor.setText(myCalc.getResult());
         monitor.setText(monitor.getText().toString().replaceAll("\\.(.*?)0+$", ".$1"));
+    }
+
+    public void onClickChangeTheme() {
+        changeTheme.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ChangeTheme.class);
+            startActivity(intent);
+        });
+
     }
 
 }
